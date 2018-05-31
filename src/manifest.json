@@ -14,7 +14,7 @@
     "js": ["play.js"]
   }],
 
-  "permissions": ["activeTab", "contextMenus"],
+  "permissions": ["activeTab", "contextMenus", "storage"],
 
   "browser_action": {
     "browser_style": true,
@@ -28,5 +28,8 @@
   },
   "icons": {
     "16": "icons/play-16.svg"
+  },
+  "options_ui": {
+    "page": "options.html"
   }
 }
