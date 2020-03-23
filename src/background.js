@@ -8,28 +8,30 @@ function invoke(info, tab) {
     url = info.linkUrl || info.srcUrl;
   }
   console.log("play-with attempting to play url " + url);
-  browser.tabs.sendMessage(tab.id, {url: url});
+  chrome.tabs.sendMessage(tab.id, {url: url});
 }
 
 /*
  * Create the context menu for links.
  */
-browser.contextMenus.create({
-  id: "play-with",
-  title: browser.i18n.getMessage("actionName"),
-  contexts: ["link", "video"]
+chrome.runtime.onInstalled.addListener(function() {
+    chrome.contextMenus.create({
+      id: "play-with",
+      title: chrome.i18n.getMessage("actionName"),
+      contexts: ["link", "video"]
+    });
 });
 
 /*
  * Register listener for the button.
  */
-browser.browserAction.onClicked.addListener((tab) => {
+chrome.browserAction.onClicked.addListener((tab) => {
   invoke(null, tab);
 });
 
 /*
  * Register listener for the context menu.
  */
-browser.contextMenus.onClicked.addListener((info, tab) => {
+chrome.contextMenus.onClicked.addListener((info, tab) => {
   invoke(info, tab);
 });

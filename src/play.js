@@ -8,12 +8,18 @@ function onError(error) {
   firstRunElapsed = false;
 }
 
+/*
+ * Chrome callback handling
+ */
 function onGot(item) {
-  firstRunElapsed = item.firstRunElapsed || false;
+  if (chrome.runtime.lastError) {
+    console.log(chrome.runtime.lastError);
+  } else {
+    firstRunElapsed = item.firstRunElapsed || false;
+  }
 }
 
-var getting = browser.storage.local.get(["firstRunElapsed"]);
-getting.then(onGot, onError);
+chrome.storage.local.get(["firstRunElapsed"], onGot);
 
 /*
  * Create a M3U playlist file, paste the passed URL into it and download it.
@@ -27,7 +33,7 @@ function download(request, sender, sendResponse) {
     // this prevents FF from remembering to "always open with..."
     var filename = "stream.m3u";
     element.setAttribute('download', filename);
-    browser.storage.local.set({
+    chrome.storage.local.set({
       firstRunElapsed: true
     });
   }
@@ -42,4 +48,4 @@ function download(request, sender, sendResponse) {
 /*
  * Register listener for message from background script.
  */
-browser.runtime.onMessage.addListener(download);
+chrome.runtime.onMessage.addListener(download);
